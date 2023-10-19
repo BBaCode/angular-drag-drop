@@ -14,19 +14,24 @@ export class DragDropComponent implements AfterViewInit {
     { x: 200, y: 100, isDraggable: true, startX: 200, startY: 100, color: 'red' },
     { x: 300, y: 100, isDraggable: true, startX: 300, startY: 100, color: 'green' }
   ];
-  private dropZone = { x: 400, y: 300, radius: 40 }; // Circular drop zone
+  private dropZone = { x: 200, y: 300, radius: 40 }; // Circular drop zone
 
   private selectedCircle: any = null;
   private isDragging = false;
   private circleInDropZone: any = null;
 
   ngAfterViewInit() {
+    const canvas: HTMLCanvasElement = this.canvas.nativeElement;
     this.ctx = this.canvas.nativeElement.getContext('2d');
     this.drawCanvas();
 
-    this.canvas.nativeElement.addEventListener('mousedown', (event) => this.onMouseDown(event));
-    this.canvas.nativeElement.addEventListener('mousemove', (event) => this.onMouseMove(event));
-    this.canvas.nativeElement.addEventListener('mouseup', () => this.onMouseUp());
+    this.canvas.nativeElement.addEventListener('touchstart', (event) => this.onMouseDown(event));
+    this.canvas.nativeElement.addEventListener('touchmove', (event) => this.onMouseMove(event));
+    this.canvas.nativeElement.addEventListener('touchend', () => this.onMouseUp());
+
+    canvas.addEventListener('touchstart', (event) => {
+      event.preventDefault();
+    });
   }
 
   drawCanvas() {
@@ -48,9 +53,9 @@ export class DragDropComponent implements AfterViewInit {
     });
   }
 
-  onMouseDown(event: MouseEvent) {
-    const mouseX = event.clientX - this.canvas.nativeElement.getBoundingClientRect().left;
-    const mouseY = event.clientY - this.canvas.nativeElement.getBoundingClientRect().top;
+  onMouseDown(event: TouchEvent) {
+    const mouseX = event.touches[0].clientX - this.canvas.nativeElement.getBoundingClientRect().left; // changed touch
+    const mouseY = event.touches[0].clientY - this.canvas.nativeElement.getBoundingClientRect().top; // changed touch
 
     this.circles.forEach(circle => {
       const dx = circle.x - mouseX;
@@ -64,10 +69,10 @@ export class DragDropComponent implements AfterViewInit {
     });
   }
 
-  onMouseMove(event: MouseEvent) {
+  onMouseMove(event: TouchEvent) {
     if (this.isDragging) {
-      const mouseX = event.clientX - this.canvas.nativeElement.getBoundingClientRect().left;
-      const mouseY = event.clientY - this.canvas.nativeElement.getBoundingClientRect().top;
+      const mouseX = event.touches[0].clientX - this.canvas.nativeElement.getBoundingClientRect().left;
+      const mouseY = event.touches[0].clientY - this.canvas.nativeElement.getBoundingClientRect().top;
 
       this.selectedCircle.x = mouseX;
       this.selectedCircle.y = mouseY;
