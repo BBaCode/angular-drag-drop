@@ -10,13 +10,13 @@ export class DragDropComponent implements AfterViewInit {
   private ctx: CanvasRenderingContext2D;
   private circleRadius = 35;
   private circles = [
-    { x: 255, y: 250, isDraggable: true, startX: 255, startY: 250},
-    { x: 105, y: 315, isDraggable: true, startX: 105, startY: 315},
-    { x: 180, y: 390, isDraggable: true, startX: 180, startY: 390},
-    { x: 255, y: 465, isDraggable: true, startX: 255, startY: 465},
-    { x: 105, y: 535, isDraggable: true, startX: 105, startY: 535}
+    { i: 0, x: 255, y: 200, isDraggable: true, startX: 255, startY: 200},
+    { i: 1, x: 105, y: 265, isDraggable: true, startX: 105, startY: 265},
+    { i: 2, x: 180, y: 340, isDraggable: true, startX: 180, startY: 340},
+    { i: 3, x: 255, y: 415, isDraggable: true, startX: 255, startY: 415},
+    { i: 4, x: 105, y: 485, isDraggable: true, startX: 105, startY: 485}
   ];
-  private dropZone = { x: 187.5, y: 100, radius: 40 }; // Circular drop zone
+  private dropZone = { x: 187.5, y: 60, radius: 40 }; // Circular drop zone
 
   private selectedCircle: any = null;
   private isDragging = false;
@@ -36,7 +36,7 @@ export class DragDropComponent implements AfterViewInit {
     });
   }
 
-  drawCanvas() {
+  drawCanvas(selectedCircle?: number) {
     this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
 
     // Draw circular drop zone
@@ -47,13 +47,17 @@ export class DragDropComponent implements AfterViewInit {
 
     const circleColors = ['blue', 'red', 'green', 'yellow', 'orange'];
 
+
+    
+
     this.circles.forEach((circle, index) => {
       this.ctx.fillStyle = circleColors[index];
       this.ctx.beginPath();
       this.ctx.arc(circle.x, circle.y, this.circleRadius, 0, 2 * Math.PI);
       this.ctx.fill();
     });
-  }
+
+}
 
   onMouseDown(event: TouchEvent) {
     const mouseX = event.touches[0].clientX - this.canvas.nativeElement.getBoundingClientRect().left; // changed touch
@@ -101,6 +105,7 @@ export class DragDropComponent implements AfterViewInit {
         this.selectedCircle.y = this.dropZone.y;
         this.selectedCircle.isDraggable = false;
         this.circleInDropZone = this.selectedCircle;
+
       } else {
         this.selectedCircle.x = this.selectedCircle.startX;
         this.selectedCircle.y = this.selectedCircle.startY;
