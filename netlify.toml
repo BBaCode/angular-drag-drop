@@ -1,6 +1,6 @@
 # Global settings
 [build]
-  command = "ng build --prod"
+  command = "ng build"
   publish = "dist/drag"
 
 # Redirects and Headers
