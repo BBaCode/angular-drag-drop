@@ -1,6 +1,5 @@
 [build]
   command = "ng build"
-  publish = "dist/drag" # Adjust the path to your Angular app's build output
 
 [[redirects]]
   from = "/*"
